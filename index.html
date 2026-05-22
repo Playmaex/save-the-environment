@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save the Environment</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header/Nav -->
+    <header>
+        <div class="logo">🌍 Ryan Abrahams works</div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">Why Protect?</a></li>
+                <li><a href="#problems">Problems</a></li>
+                <li><a href="#action">How to Help</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>SAVE THE ENVIRONMENT</h1>
+            <p>Small Actions, Big Change</p>
+            <a href="#about" class="cta-button">Learn More</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-page">
+        <div class="container">
+            <h2>Why Protect Nature?</h2>
+            <div class="layout-split">
+                <div class="text-content">
+                    <p>Nature is not just a place to visit—it is our only home. Ensuring the protection of our environment is vital for the survival of all species, including humanity. By safeguarding natural habitats, we maintain the delicate balance of ecosystems that provide us with clean air, fresh water, and the resources necessary to thrive.</p>
+                    <p>If we fail to protect our environment, we face catastrophic consequences: severe climate events, loss of biodiversity, and a world that may become increasingly uninhabitable for future generations. The time to act is now.</p>
+                </div>
+                <div class="image-content">
+                    <img src="images/hero.png" alt="Beautiful Nature" class="rounded-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problems Section -->
+    <section id="problems" class="problems">
+        <div class="container">
+            <h2>Threats to Our Planet</h2>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="icon">🏭</div>
+                    <h3>Pollution</h3>
+                    <p>Harmful emissions pollute the air we breathe and the water we drink, harming human health and wildlife.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">🧴</div>
+                    <h3>Plastic Waste</h3>
+                    <p>Millions of tons of plastic enter our oceans every year, trapping and poisoning marine creatures.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="icon">🪓</div>
+                    <h3>Deforestation</h3>
+                    <p>Cutting down forests destroys habitats and accelerates climate change by releasing stored carbon.</p>
+                </div>
+            </div>
+            <div class="image-showcase">
+                <img src="images/Pollution.png" alt="Pollution image">
+            </div>
+        </div>
+    </section>
+
+    <!-- Action Section -->
+    <section id="action" class="action">
+        <div class="container">
+            <h2>Small Habits Make a Difference</h2>
+            <div class="action-grid">
+                <div class="action-item">
+                    <div class="action-icon">🌱</div>
+                    <h3>Plant Trees</h3>
+                    <p>Trees absorb carbon dioxide, give us oxygen, and provide habitats for wildlife. Planting even one tree helps!</p>
+                </div>
+                <div class="action-item">
+                    <div class="action-icon">♻️</div>
+                    <h3>Recycle</h3>
+                    <p>Reduce waste by reusing materials and recycling plastics, glass, paper, and metals properly.</p>
+                </div>
+                <div class="action-item">
+                    <div class="action-icon">💧</div>
+                    <h3>Save Water</h3>
+                    <p>Conserve this vital resource by fixing leaks, taking shorter showers, and turning off the tap when not needed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pledge Section -->
+    <section class="pledge-section">
+        <div class="container">
+            <div class="pledge-box">
+                <h2>Make a Green Pledge Today</h2>
+                <p>Join thousands of others in committing to a healthier lifestyle for the planet.</p>
+                <form id="pledge-form" class="pledge-form">
+                    <input type="text" id="pledge-name" placeholder="Your Name" required>
+                    <input type="email" id="pledge-email" placeholder="Your Email address" required>
+                    <div class="pledge-action-row">
+                        <button type="submit" id="pledge-btn" class="cta-button">I Pledge to Help!</button>
+                        <div class="pledge-stats">
+                            🌍 <span id="pledge-count">...</span><br>
+                            <small>people worldwide</small>
+                        </div>
+                    </div>
+                    <p id="pledge-message" style="margin-top: 15px; color: var(--accent-color); font-weight: bold;"></p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts for Pledge Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('pledge-form');
+            const btn = document.getElementById('pledge-btn');
+            const nameInput = document.getElementById('pledge-name');
+            const emailInput = document.getElementById('pledge-email');
+            const countDisplay = document.getElementById('pledge-count');
+            const message = document.getElementById('pledge-message');
+
+            // We use a free counter API to get REAL worldwide stats!
+            const API_URL = "https://api.counterapi.dev/v1/ryan-earthcare/pledges";
+
+            // Function to disable form
+            function lockForm(isFromStorage) {
+                btn.disabled = true;
+                btn.textContent = isFromStorage ? "You've Pledged!" : "Pledge Saved!";
+                btn.style.backgroundColor = "#555";
+                btn.style.boxShadow = "none";
+                btn.style.cursor = "not-allowed";
+                nameInput.disabled = true;
+                emailInput.disabled = true;
+            }
+
+            // Load initial count from the real server
+            fetch(API_URL)
+                .then(response => response.json())
+                .then(data => {
+                    countDisplay.textContent = (data.count || 0).toLocaleString();
+                })
+                .catch(err => {
+                    countDisplay.textContent = "0"; // fallback
+                });
+            
+            // Check if this computer has already pledged
+            if(localStorage.getItem('ryanPledged') === 'true') {
+                lockForm(true);
+                message.textContent = "Thank you for your commitment to our earth! 🌱";
+                message.style.color = "#fff";
+            }
+
+            // Handle when someone actually submits the pledge
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Save pledge to the browser's storage
+                localStorage.setItem('ryanPledged', 'true');
+                
+                // Call the API to actually increment the global server count!
+                fetch(API_URL + "/up")
+                    .then(response => response.json())
+                    .then(data => {
+                        countDisplay.textContent = (data.count || 0).toLocaleString();
+                    });
+                
+                lockForm(false);
+                message.textContent = `Awesome, ${nameInput.value.split(" ")[0]}! Your pledge was added worldwide! 🌍`;
+            });
+        });
+    </script>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">🌍 Ryan Abrahams works</div>
+            <p>Made with ❤️ to protect our planet. Small Actions, Big Change.</p>
+            <p>&copy; 2026 Publisher project Save the Environment</p>
+        </div>
+    </footer>
+</body>
+</html>
