@@ -144,12 +144,14 @@
             }
 
             // Load initial count from the real server
-            fetch(API_URL)
+            // (Adding the trailing slash prevents the server from redirecting, which caused the error!)
+            fetch(API_URL + "/")
                 .then(response => response.json())
                 .then(data => {
                     countDisplay.textContent = (data.count || 0).toLocaleString();
                 })
                 .catch(err => {
+                    console.error("API error:", err);
                     countDisplay.textContent = "0"; // fallback
                 });
             
